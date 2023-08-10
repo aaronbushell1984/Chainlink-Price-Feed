@@ -6,9 +6,11 @@ const { deployFundMe, INITIAL_PRICE } = require("../../scripts/deployFundMe");
 !developmentChains.includes(network.name)
   ? describe.skip
   : describe("FundMe", function () {
+
       let fundMe;
       let deployer;
       const sendValue = ethers.utils.parseEther("10");
+
       beforeEach(async () => {
         const accounts = await ethers.getSigners();
         deployer = accounts[0];
@@ -16,6 +18,7 @@ const { deployFundMe, INITIAL_PRICE } = require("../../scripts/deployFundMe");
       });
 
       describe("fund", function () {
+
         // https://ethereum-waffle.readthedocs.io/en/latest/matchers.html
         // could also do assert.fail
         it("Fails if you don't send enough ETH", async () => {
@@ -23,6 +26,7 @@ const { deployFundMe, INITIAL_PRICE } = require("../../scripts/deployFundMe");
             "You need to spend more ETH!"
           );
         });
+
         // we could be even more precise here by making sure exactly $50 works
         // but this is good enough for now
         it("Updates the amount funded data structure", async () => {
@@ -40,6 +44,7 @@ const { deployFundMe, INITIAL_PRICE } = require("../../scripts/deployFundMe");
           assert.equal(response, deployer.address);
         });
       });
+
       describe("withdraw", function () {
         beforeEach(async () => {
           await fundMe.fund({ value: sendValue });
@@ -74,6 +79,7 @@ const { deployFundMe, INITIAL_PRICE } = require("../../scripts/deployFundMe");
             endingDeployerBalance.add(gasCost).toString()
           );
         });
+
         // this test is overloaded. Ideally we'd split it into multiple tests
         // but for simplicity we left it as one
         it("is allows us to withdraw with multiple funders", async () => {
@@ -119,6 +125,7 @@ const { deployFundMe, INITIAL_PRICE } = require("../../scripts/deployFundMe");
             );
           }
         });
+
         it("Only allows the owner to withdraw", async function () {
           const accounts = await ethers.getSigners();
           const fundMeConnectedContract = await fundMe.connect(accounts[1]);
@@ -126,5 +133,6 @@ const { deployFundMe, INITIAL_PRICE } = require("../../scripts/deployFundMe");
             fundMeConnectedContract.withdraw()
           ).to.be.revertedWithCustomError(fundMe, "FundMe__NotOwner");
         });
+
       });
-    });
+  });
