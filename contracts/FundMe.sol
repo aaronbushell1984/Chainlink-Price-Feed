@@ -11,7 +11,7 @@ contract FundMe {
     using PriceConverter for uint;
 
     // constants are set with value immediately
-    uint public constant MINIMUM_USD = 50 * 1 ether;
+    uint public constant MINIMUM_USD = 5 * 1 ether;
 
     // immutables can only set with a value once
     // i_ is a convention for immutables
